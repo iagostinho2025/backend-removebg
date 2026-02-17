@@ -1,4 +1,4 @@
-﻿from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 import requests
@@ -7,12 +7,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://127.0.0.1:5500",
-        "http://localhost:5500",
-        "http://127.0.0.1:8000",
-        "http://localhost:8000",
-    ],
+    allow_origins=["*"],  # ← libera Vercel, localhost, tudo
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -34,6 +29,12 @@ async def remove_bg(file: UploadFile = File(...)):
     )
 
     if response.status_code != 200:
-        return Response(content=response.text, status_code=response.status_code)
+        return Response(
+            content=response.text,
+            status_code=response.status_code
+        )
 
-    return Response(content=response.content, media_type="image/png")
+    return Response(
+        content=response.content,
+        media_type="image/png"
+    )
